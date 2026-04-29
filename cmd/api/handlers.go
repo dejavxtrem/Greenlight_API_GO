@@ -3,6 +3,10 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"time"
+
+	"github.com/dejavxtrem/Greenlight_API/internal/data"
+	// New import
 )
 
 // Add a createMovieHandler for the "POST /v1/movies" endpoint. For now we simply
@@ -22,6 +26,18 @@ func (app *application) showMovieHandler(w http.ResponseWriter, r *http.Request)
 	if err != nil {
 		http.NotFound(w, r)
 		return
+	}
+
+	// Create a new instance of the Movie struct, containing the ID we extracted from
+	// the URL and some dummy data. Also notice that we deliberately haven't set a
+	// value for the Year field.
+	movie := data.Movie{
+		ID:        id,
+		CreatedAt: time.Now(),
+		Title:     "Casablanca",
+		Runtime:   102,
+		Genres:    []string{"drama", "romance", "war"},
+		Version:   1,
 	}
 
 	// We can then use the ByName() method to get the value of the "id" parameter from

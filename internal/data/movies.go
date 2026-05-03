@@ -5,11 +5,11 @@ import (
 )
 
 type Movie struct {
-	ID        int       // Unique integer ID for the movie
-	CreatedAt time.Time // Timestamp for when the movie is added to our database
-	Title     string
-	Year      int
-	Runtime   int
-	Genres    []string
-	Version   int
+	ID        int       `json:"id"` // Unique integer ID for the movie
+	CreatedAt time.Time `json:"-"`  // Timestamp for when the movie is added to our database
+	Title     string    `json:"title"`
+	Year      int       `json:"year,omitzero"`
+	Runtime   Runtime   `json:"runtime,omitzero,string"`
+	Genres    []string  `json:"genres,omitzero"`
+	Version   int       `json:"version"`
 }

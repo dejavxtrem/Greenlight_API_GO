@@ -24,13 +24,15 @@ func (app *application) showMovieHandler(w http.ResponseWriter, r *http.Request)
 	// retrieve a slice containing these parameter names and values.
 	id, err := app.readIDParam(r)
 	if err != nil {
-		http.NotFound(w, r)
+		app.notFoundResponse(w, r)
+		//http.NotFound(w, r)
 		return
 	}
 
 	// Create a new instance of the Movie struct, containing the ID we extracted from
 	// the URL and some dummy data. Also notice that we deliberately haven't set a
 	// value for the Year field.
+
 	movie := data.Movie{
 		ID:        id,
 		CreatedAt: time.Now(),
@@ -40,6 +42,12 @@ func (app *application) showMovieHandler(w http.ResponseWriter, r *http.Request)
 		Version:   1,
 	}
 
+	err = app.writeJSON(w, http.StatusOK, envelope{"movie": movie}, nil)
+	if err != nil {
+		//app.logger.Error(err.Error())
+		app.serverErrorResponse(w, r, err)
+		//http.Error(w, "The server encountered a problem and could not process your request", http.StatusInternalServerError)
+	}
 	// We can then use the ByName() method to get the value of the "id" parameter from
 	// the slice. In our project all movies will have a unique positive integer ID, but
 	// the value returned by ByName() is always a string. So we try to convert it to an
@@ -52,5 +60,5 @@ func (app *application) showMovieHandler(w http.ResponseWriter, r *http.Request)
 	// 	return
 	// }
 	// Otherwise, interpolate the movie ID in a placeholder response.
-	fmt.Fprintf(w, "show the details of movie %d\n", id)
+	//fmt.Fprintf(w, "show the details of movie %d\n", id)
 }

@@ -18,8 +18,12 @@ func (app *application) recoverPanic(next http.Handler) http.Handler {
 			if pv != nil {
 				// Set a "Connection: close" header on the response.
 				w.Header().Set("Connection", "close")
-				// Call the app.serverError helper method to return a 500
-				// Internal Server response.
+				// The value returned by recover() has the type any, so we use
+				// fmt.Errorf() with the %v verb to coerce it into an error and
+				// call our serverErrorResponse() helper. In turn, this will log the
+				// error at the ERROR level and send the client a 500 Internal
+				// Server Error response.
+
 				app.serverErrorResponse(w, r, fmt.Errorf("%v", pv))
 			}
 		}()

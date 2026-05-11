@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json" // New import
 	"errors"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -55,4 +56,26 @@ func (app *application) writeJSON(w http.ResponseWriter, status int, data envelo
 	w.Write(js)
 
 	return nil
+}
+
+func (app *application) readJSON(w http.ResponseWriter, r http.Request, dst any) error {
+	// Decode the request body into the target destination.
+	err := json.NewDecoder(r.Body).Decode(dst)
+
+	if err != nil {
+		// If there is an error during decoding, start the triage...
+		var syntaxError *json.SyntaxError
+		var unmarshalTypeError *json.UnmarshalTypeError
+		var invalidUnmarshalError *json.InvalidUnmarshalError
+
+		switch {
+		// Use the errors.As() function to check whether the error has the type
+		// *json.SyntaxError. If it does, then return a plain-english error message
+		// which includes the location of the problem.
+		case errors.As(err, &syntaxError):
+			return fmt.Errorf("body contains badly-formed JSON (at character %d)", syntaxError.Offset)
+
+		}
+
+	}
 }

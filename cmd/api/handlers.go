@@ -1,6 +1,7 @@
 package main
 
 import (
+	//"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
@@ -12,6 +13,7 @@ import (
 // Add a createMovieHandler for the "POST /v1/movies" endpoint. For now we simply
 // return a plain-text placeholder response.
 func (app *application) createMovieHandler(w http.ResponseWriter, r *http.Request) {
+
 	//fmt.Fprintln(w, "create a new movie")
 	// Declare an anonymous struct to hold the information that we expect to be in the
 	// HTTP request body (note that the field names and types in the struct are a subset

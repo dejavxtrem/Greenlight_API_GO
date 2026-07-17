@@ -13,6 +13,7 @@ import (
 	// Import the pq driver so that it can register itself with the database/sql
 	// package. Note that we alias this import to the blank identifier, to stop the Go
 	// compiler complaining that the package isn't being used.
+	"github.com/dejavxtrem/Greenlight_API/internal/data"
 	_ "github.com/lib/pq"
 )
 
@@ -29,9 +30,11 @@ type config struct {
 	}
 }
 
+// Add a models field to hold our new Models struct.
 type application struct {
 	config config
 	logger *slog.Logger
+	models data.Models
 }
 
 func main() {
@@ -78,6 +81,7 @@ func main() {
 	app := &application{
 		config: cfg,
 		logger: logger,
+		models: data.NewModels(db),
 	}
 
 	// Declare a new servemux and add a /v1/healthcheck route which dispatches requests
